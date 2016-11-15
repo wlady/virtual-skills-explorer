@@ -74,61 +74,8 @@ GET /skills/programmers/_mapping?pretty
 }
 ```
 
-Структура MySQL таблицы для денормализованных данных:
 
-```sql
-CREATE TABLE `programmers_denormalized` (
- `id` int(11) NOT NULL AUTO_INCREMENT,
- `name` varchar(64) COLLATE utf8_unicode_ci NOT NULL,
- `ip` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
- `registered` bigint(20) NOT NULL,
- `city` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
- `latitude` double NOT NULL,
- `longitude` double NOT NULL,
- `timezone` varchar(40) COLLATE utf8_unicode_ci NOT NULL,
- `skills` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
- PRIMARY KEY (`id`),
- KEY `registered` (`registered`) USING BTREE,
- FULLTEXT KEY `skills` (`skills`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-```
-
-Структура MySQL таблиц для нормализованных данных:
-
-```sql
-CREATE TABLE `programmers_normalized` (
- `id` int(11) NOT NULL AUTO_INCREMENT,
- `name` varchar(64) COLLATE utf8_unicode_ci NOT NULL,
- `ip` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
- `registered` bigint(20) NOT NULL,
- `city` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
- `latitude` double NOT NULL,
- `longitude` double NOT NULL,
- `timezone` varchar(40) COLLATE utf8_unicode_ci NOT NULL,
- PRIMARY KEY (`id`),
- KEY `registered` (`registered`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
-CREATE TABLE `skills` (
- `id` int(11) NOT NULL AUTO_INCREMENT,
- `skill` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
- PRIMARY KEY (`id`),
- KEY `skill` (`skill`)
-) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
-CREATE TABLE `skills_relations` (
- `person` int(11) NOT NULL,
- `skill` int(11) NOT NULL,
- KEY `person_constraints1` (`person`),
- KEY `skill_constraints1` (`skill`),
- CONSTRAINT `person_constraints1` FOREIGN KEY (`person`) REFERENCES `programmers_normalized` (`id`) ON DELETE CASCADE,
- CONSTRAINT `skill_constraints1` FOREIGN KEY (`skill`) REFERENCES `skills` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-```
-
-### Пример тестовых данных
-
-**ElasticSearch**
+#### Пример тестовых данных
 
 ```sh
 GET /skills/programmers/_search?pretty -d
@@ -232,10 +179,29 @@ GET /skills/programmers/_search?pretty -d
 ```
 Объем данных ~27МБ.
 
-**MySQL (денормализованные данные)**
+### Структура MySQL (денормализованная)
+
 
 ```sql
-SELECT * FROM `programmers_denormalized` LIMIT 3
+CREATE TABLE `programmers_denormalized` (
+ `id` int(11) NOT NULL AUTO_INCREMENT,
+ `name` varchar(64) COLLATE utf8_unicode_ci NOT NULL,
+ `ip` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
+ `registered` bigint(20) NOT NULL,
+ `city` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
+ `latitude` double NOT NULL,
+ `longitude` double NOT NULL,
+ `timezone` varchar(40) COLLATE utf8_unicode_ci NOT NULL,
+ `skills` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+ PRIMARY KEY (`id`),
+ KEY `registered` (`registered`) USING BTREE,
+ FULLTEXT KEY `skills` (`skills`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+```
+#### Пример тестовых данных
+
+```sql
+SELECT * FROM programmers_denormalized LIMIT 3
 ```
 
 ![Query Results](programmers_table.png)
@@ -243,10 +209,44 @@ SELECT * FROM `programmers_denormalized` LIMIT 3
 Объем данных ~19МБ.
 
 
-**MySQL (нормализованные данные)**
+
+### Структура MySQL связанных таблиц
 
 ```sql
-SELECT DISTINCT p.*, (SELECT GROUP_CONCAT(s1.skill) FROM skills_relations sr1 JOIN skills s1 ON sr1.skill=s1.id WHERE sr1.person=p.id) skills FROM skills_relations sr JOIN `programmers_normalized` p ON p.id=sr.person JOIN skills s ON s.id=sr.skill LIMIT 3
+CREATE TABLE `programmers_normalized` (
+ `id` int(11) NOT NULL AUTO_INCREMENT,
+ `name` varchar(64) COLLATE utf8_unicode_ci NOT NULL,
+ `ip` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
+ `registered` bigint(20) NOT NULL,
+ `city` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
+ `latitude` double NOT NULL,
+ `longitude` double NOT NULL,
+ `timezone` varchar(40) COLLATE utf8_unicode_ci NOT NULL,
+ PRIMARY KEY (`id`),
+ KEY `registered` (`registered`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+CREATE TABLE `skills` (
+ `id` int(11) NOT NULL AUTO_INCREMENT,
+ `skill` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
+ PRIMARY KEY (`id`),
+ KEY `skill` (`skill`)
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+CREATE TABLE `skills_relations` (
+ `person` int(11) NOT NULL,
+ `skill` int(11) NOT NULL,
+ KEY `person_constraints1` (`person`),
+ KEY `skill_constraints1` (`skill`),
+ CONSTRAINT `person_constraints1` FOREIGN KEY (`person`) REFERENCES `programmers_normalized` (`id`) ON DELETE CASCADE,
+ CONSTRAINT `skill_constraints1` FOREIGN KEY (`skill`) REFERENCES `skills` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+```
+
+#### Пример тестовых данных
+
+```sql
+SELECT DISTINCT p.*, (SELECT GROUP_CONCAT(s1.skill) FROM skills_relations sr1 JOIN skills s1 ON sr1.skill=s1.id WHERE sr1.person=p.id) skills FROM skills_relations sr JOIN programmers_normalized p ON p.id=sr.person JOIN skills s ON s.id=sr.skill LIMIT 3
 ```
 
 ![Query Results](programmers_table.png)
