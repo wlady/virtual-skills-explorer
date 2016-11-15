@@ -14,18 +14,18 @@ use Illuminate\Http\Request;
  * Class Player
  * @package App
  */
-class PlayerRepository
+class ProgrammerRepository
 {
     /**
-     * @var PlayerStorageInterface
+     * @var ProgrammerStorageInterface
      */
     protected $storage = null;
 
     /**
      * PlayerRepository constructor.
-     * @param PlayerStorageInterface $storage
+     * @param ProgrammerStorageInterface $storage
      */
-    public function __construct(PlayerStorageInterface $storage)
+    public function __construct(ProgrammerStorageInterface $storage)
     {
         $this->storage = $storage;
     }

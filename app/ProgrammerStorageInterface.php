@@ -10,7 +10,7 @@ namespace App;
 
 use Illuminate\Http\Request;
 
-interface PlayerStorageInterface
+interface ProgrammerStorageInterface
 {
     public function getSkills();
     public function getTotal();

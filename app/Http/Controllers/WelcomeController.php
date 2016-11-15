@@ -35,8 +35,8 @@ class WelcomeController extends Controller
     public function index()
     {
         return view('welcome', [
-            'total' => $this->player->getTotal(),
-            'skills' => $this->player->getSkills(),
+            'total' => $this->person->getTotal(),
+            'skills' => $this->person->getSkills(),
         ]);
     }
 

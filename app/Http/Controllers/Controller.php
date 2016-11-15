@@ -3,17 +3,17 @@
 use Illuminate\Foundation\Bus\DispatchesCommands;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Validation\ValidatesRequests;
-use App\PlayerElasticStorage;
-use App\PlayerRepository;
+use App\ProgrammerElasticStorage;
+use App\ProgrammerRepository;
 
 abstract class Controller extends BaseController {
 
 	use DispatchesCommands, ValidatesRequests;
 
-    protected $player = null;
+    protected $person = null;
 
     public function __construct()
     {
-        $this->player = new PlayerRepository(new PlayerElasticStorage());
+        $this->person = new ProgrammerRepository(new ProgrammerElasticStorage());
     }
 }

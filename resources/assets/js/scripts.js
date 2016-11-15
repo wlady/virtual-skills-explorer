@@ -219,9 +219,9 @@ $(document).ready(function() {
     $('select[name="sort"]').on('change', function(e) {
        setDirection($(e.target).val())
     });
-    // $.addTemplateFormatter('SkillFormatter', function(value) {
-    //     return '<span class="skill">'+value+'</span>';
-    // });
+    $.addTemplateFormatter('SkillFormatter', function(value) {
+        return '<span class="skill">'+value+'</span>';
+    });
     $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
         execRenderMethod(false);
     });

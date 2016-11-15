@@ -106,7 +106,7 @@
 			<div><label>Time Zone</label><span data-content="timezone"></span></div>
 			<div><label>Date</label><span data-content="registered"></span></div>
 			<div><label>IP</label><span data-content="ip"></span></div>
-			{{--<div><label>Skills</label><span data-content="skills" data-format="SkillFormatter"></span></div>--}}
+			<div><label>Skills</label><span data-content="skills" data-format="SkillFormatter"></span></div>
 		</div>
 	</script>
 

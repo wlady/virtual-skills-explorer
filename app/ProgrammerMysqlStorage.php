@@ -8,8 +8,6 @@
 
 namespace App;
 
-use Elasticquent\ElasticquentTrait;
-use Elasticsearch\Common\Exceptions\BadMethodCallException;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 
@@ -17,10 +15,8 @@ use Illuminate\Http\Request;
  * Class PlayerElasticStorage
  * @package App
  */
-class PlayerElasticStorage extends Model implements PlayerStorageInterface
+class ProgrammerMysqlStorage extends Model implements ProgrammerStorageInterface
 {
-    use ElasticquentTrait;
-
     /**
      * @return string
      */
@@ -34,7 +30,7 @@ class PlayerElasticStorage extends Model implements PlayerStorageInterface
      */
     public function getTotal()
     {
-        return $this->request('', 'count');
+        return self::query()->count();
     }
 
     /**
