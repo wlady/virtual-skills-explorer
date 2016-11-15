@@ -204,7 +204,7 @@ CREATE TABLE `programmers_denormalized` (
 SELECT * FROM programmers_denormalized LIMIT 3
 ```
 
-![Query Results](programmers_table.png)
+![Query Results](denormalized.png)
 
 Объем данных ~19МБ.
 
@@ -287,7 +287,7 @@ POST данные взяты из локального файла и соотв�
 ab -n 10000 -c 10 -T 'application/x-www-form-urlencoded' -p post_data.txt http://exp/filter
 ```
 
-ElasticSearch
+**ElasticSearch**
 
 ```sh
 This is ApacheBench, Version 2.3 <$Revision: 1748469 $>
@@ -305,35 +305,135 @@ Document Path:          /filter
 Document Length:        12324 bytes
 
 Concurrency Level:      10
-Time taken for tests:   52.154 seconds
+Time taken for tests:   62.151 seconds
 Complete requests:      10000
 Failed requests:        0
 Non-2xx responses:      10000
 Total transferred:      126000000 bytes
 Total body sent:        2920000
 HTML transferred:       123240000 bytes
-Requests per second:    191.74 [#/sec] (mean)
-Time per request:       52.154 [ms] (mean)
-Time per request:       5.215 [ms] (mean, across all concurrent requests)
-Transfer rate:          2359.29 [Kbytes/sec] received
-                        54.68 kb/s sent
-                        2413.97 kb/s total
+Requests per second:    160.90 [#/sec] (mean)
+Time per request:       62.151 [ms] (mean)
+Time per request:       6.215 [ms] (mean, across all concurrent requests)
+Transfer rate:          1979.82 [Kbytes/sec] received
+                        45.88 kb/s sent
+                        2025.70 kb/s total
 
 Connection Times (ms)
               min  mean[+/-sd] median   max
-Connect:        0    0   0.1      0       4
-Processing:     8   52  26.2     48     203
-Waiting:        6   38  22.9     34     202
-Total:          8   52  26.2     48     203
+Connect:        0    0   0.0      0       3
+Processing:    10   62  30.4     59     249
+Waiting:        8   48  26.0     44     214
+Total:         10   62  30.4     59     249
 
 Percentage of the requests served within a certain time (ms)
-  50%     48
-  66%     59
-  75%     67
-  80%     73
-  90%     88
-  95%    101
-  98%    116
-  99%    128
- 100%    203 (longest request)
+  50%     59
+  66%     71
+  75%     80
+  80%     86
+  90%    103
+  95%    118
+  98%    134
+  99%    146
+ 100%    249 (longest request)
+```
+**MySQL**
+
+```
+This is ApacheBench, Version 2.3 <$Revision: 1748469 $>
+Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
+Licensed to The Apache Software Foundation, http://www.apache.org/
+
+Benchmarking exp (be patient)
+
+
+Server Software:        Apache/2.4.23
+Server Hostname:        exp
+Server Port:            80
+
+Document Path:          /filter
+Document Length:        12324 bytes
+
+Concurrency Level:      10
+Time taken for tests:   60.820 seconds
+Complete requests:      10000
+Failed requests:        0
+Non-2xx responses:      10000
+Total transferred:      126000000 bytes
+Total body sent:        2920000
+HTML transferred:       123240000 bytes
+Requests per second:    164.42 [#/sec] (mean)
+Time per request:       60.820 [ms] (mean)
+Time per request:       6.082 [ms] (mean, across all concurrent requests)
+Transfer rate:          2023.13 [Kbytes/sec] received
+                        46.89 kb/s sent
+                        2070.01 kb/s total
+
+Connection Times (ms)
+              min  mean[+/-sd] median   max
+Connect:        0    0   0.0      0       1
+Processing:    10   61  28.2     58     217
+Waiting:        8   47  24.3     44     216
+Total:         10   61  28.2     58     217
+
+Percentage of the requests served within a certain time (ms)
+  50%     58
+  66%     69
+  75%     77
+  80%     83
+  90%     99
+  95%    112
+  98%    128
+  99%    138
+ 100%    217 (longest request)
+```
+
+**MySQL (денормализованная)**
+```
+This is ApacheBench, Version 2.3 <$Revision: 1748469 $>
+Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
+Licensed to The Apache Software Foundation, http://www.apache.org/
+
+Benchmarking exp (be patient)
+
+
+Server Software:        Apache/2.4.23
+Server Hostname:        exp
+Server Port:            80
+
+Document Path:          /filter
+Document Length:        12324 bytes
+
+Concurrency Level:      10
+Time taken for tests:   60.992 seconds
+Complete requests:      10000
+Failed requests:        0
+Non-2xx responses:      10000
+Total transferred:      126000000 bytes
+Total body sent:        2920000
+HTML transferred:       123240000 bytes
+Requests per second:    163.96 [#/sec] (mean)
+Time per request:       60.992 [ms] (mean)
+Time per request:       6.099 [ms] (mean, across all concurrent requests)
+Transfer rate:          2017.44 [Kbytes/sec] received
+                        46.75 kb/s sent
+                        2064.19 kb/s total
+
+Connection Times (ms)
+              min  mean[+/-sd] median   max
+Connect:        0    0   0.1      0       7
+Processing:    10   61  27.9     58     204
+Waiting:        8   47  24.1     44     194
+Total:         10   61  27.9     58     204
+
+Percentage of the requests served within a certain time (ms)
+  50%     58
+  66%     70
+  75%     78
+  80%     83
+  90%    100
+  95%    112
+  98%    124
+  99%    135
+ 100%    204 (longest request)
 ```

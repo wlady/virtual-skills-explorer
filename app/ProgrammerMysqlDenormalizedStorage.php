@@ -15,9 +15,9 @@ use Illuminate\Http\Request;
  * Class PlayerElasticStorage
  * @package App
  */
-class ProgrammerMysqlStorage extends Model implements ProgrammerStorageInterface
+class ProgrammerMysqlDenormalizedStorage extends Model implements ProgrammerStorageInterface
 {
-    protected $table = 'programmers_normalized';
+    protected $table = 'programmers_denormalized';
 
     /**
      * @return mixed
@@ -50,25 +50,23 @@ class ProgrammerMysqlStorage extends Model implements ProgrammerStorageInterface
         $size = intval($request->get('size'));
         $sort = filter_var($request->get('sort'), FILTER_SANITIZE_STRING);
         $dir = filter_var($request->get('dir'), FILTER_SANITIZE_STRING);
+        $where = [];
+        if (is_array($skills)) {
+            foreach ($skills as $skill) {
+                $where[] = 'skills LIKE \'%"' . $skill . '"%\'';
+            }
+        }
         $sql =
-            'SELECT DISTINCT SQL_CALC_FOUND_ROWS
-                p.name, p.city, p.ip, p.registered, p.latitude, p.longitude, p.timezone, 
-                (SELECT 
-                    GROUP_CONCAT(s1.skill) 
-                FROM skills_relations sr1 
-                JOIN skills s1 ON sr1.skill=s1.id 
-                WHERE sr1.person=p.id) skills 
-            FROM skills_relations sr 
-            JOIN programmers_normalized p ON p.id=sr.person 
-            JOIN skills s ON s.id=sr.skill ' .
-            (is_array($skills) ? ' WHERE s.skill IN ("' . implode('","', $skills) . '") ' : ' ') .
+            'SELECT DISTINCT SQL_CALC_FOUND_ROWS *
+            FROM programmers_denormalized ' .
+            (count($where) ? ' WHERE ' . implode(' OR ', $where) . ' ' : ' ') .
             (!empty($sort) ? ' ORDER BY ' . $sort . ' ' . $dir : ' ') .
             ' LIMIT ' . $from . ', ' . $size;
         $startTime = microtime(true);
         $results = self::hydrateRaw($sql)->toArray();
         $numRows = self::hydrateRaw('SELECT FOUND_ROWS() total');
         array_walk($results, function (&$item) {
-            $item['skills'] = explode(',', $item['skills']);
+            $item['skills'] = explode(',', str_replace('"', '', $item['skills']));
             $item['location'] = [
                 'lat' => $item['latitude'],
                 'lon' => $item['longitude'],

@@ -4,6 +4,8 @@ use Illuminate\Foundation\Bus\DispatchesCommands;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use App\ProgrammerElasticStorage;
+use App\ProgrammerMysqlStorage;
+use App\ProgrammerMysqlDenormalizedStorage;
 use App\ProgrammerRepository;
 
 abstract class Controller extends BaseController {
