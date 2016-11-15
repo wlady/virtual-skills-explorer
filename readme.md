@@ -1,4 +1,4 @@
-# ElasticSearch vs MySQL vs MongoDB
+# ElasticSearch vs MySQL
 
 *Сравнение времени выполнения запросов к разным типам баз данных.*
 
@@ -387,6 +387,9 @@ $ ab -n 10000 -c 10 -T 'application/x-www-form-urlencoded' -p post_data.txt http
  }
 ```
 
+Для доступа к ElasticSearch использовался пакет [Elasticquent](https://packagist.org/packages/elasticquent/elasticquent). В тяжелых запросах к MySQL использовался "чистый" SQL.
+
+
 **Результаты тестов ElasticSearch**
 
 ```sh
@@ -537,3 +540,11 @@ Percentage of the requests served within a certain time (ms)
   99%    135
  100%    204 (longest request)
 ```
+
+## Выводы
+
+Задача поиска в базе данных с объемом записей ~100К происходит немного быстрее в ElasticSearch. Но при значительном увеличении объема записей отставание MySQL становится намного заметней. 
+
+При этом в MySQL приходится применять различные ухищрения для достижения приемлемых результатов. 
+
+Увеличение же количества записей до 5-10 миллионов практически не отражается на быстродействии запросов в ElasticSearch. И, к сожалению, имеет весьма печальные результаты в MySQL.

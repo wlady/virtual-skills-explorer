@@ -79,7 +79,6 @@ class ProgrammerMysqlDenormalizedStorage extends Model implements ProgrammerStor
             'total' => $numRows[0]['total'],
             'hits' => $results,
             'elapsed' => (float)number_format(microtime(true) - $startTime, 5),
-            'sql' => $sql,
         ];
     }
 }

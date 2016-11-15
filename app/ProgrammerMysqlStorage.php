@@ -81,7 +81,6 @@ class ProgrammerMysqlStorage extends Model implements ProgrammerStorageInterface
             'total' => $numRows[0]['total'],
             'hits' => $results,
             'elapsed' => (float)number_format(microtime(true) - $startTime, 5),
-            'sql' => $sql,
         ];
     }
 }
