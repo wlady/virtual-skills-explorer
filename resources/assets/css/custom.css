@@ -1,0 +1,78 @@
+.container {
+    display: table-cell;
+    vertical-align: middle;
+}
+.title {
+    font-weight: 300;
+    font-size: 2rem;
+}
+.form_content {
+    margin-right: 2rem;
+    padding: 0 1rem;
+    float: left;
+    border-right: 1px solid #eee;
+    position: relative;
+}
+.content {
+    float: left;
+    width: 50rem;
+}
+.btn_div {
+    margin: 2rem auto;
+    width: 100%;
+    text-align: center;
+}
+.list {
+    margin-top: 1em;
+}
+.list_item {
+    margin: 1rem 0;
+    padding: 1rem 0;
+    border-top: 1px solid #eee;
+}
+.list_item label {
+    width: 6em;
+}
+.total {
+    padding: 1rem 0;
+    color: darkblue;
+}
+form.skills {
+    text-align: left;
+    color: black;
+}
+form.skills label {
+    width: 14em;
+    display: inline-block;
+    line-height: 1.5em;
+    font-weight: 400;
+}
+form.skills bb {
+    color: darkblue;
+    font-style: italic;
+    margin-left: 10px;
+    float: right;
+}
+form.skills label input[type=checkbox] {
+    float: left;
+    margin-right: 0.5rem;
+}
+fieldset {
+    margin-bottom: 1rem;
+    border-bottom: 1px solid #f7f7f7;
+}
+.control-label {
+    color: darkslategrey;
+}
+#gmap, .charts-container {
+    min-height: 400px;
+    min-width: 600px;
+    width: 800px;
+    height: 600px;
+}
+.gname {
+    font-weight: bold;
+}
+.navbar {
+    margin-bottom: 1rem;
+}
