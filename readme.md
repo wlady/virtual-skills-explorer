@@ -368,7 +368,8 @@ ElasticSearch | 2.4
 ```sh
 $ php artizan cache:clear
 ```
-Подключение нового дата провайдера производилось вручную, в файле `app/Http/Controllers/Controller.php`:
+
+Переключение дата провайдеров производилось вручную, в файле `app/Http/Controllers/Controller.php`:
 
 ```php
  abstract class Controller extends BaseController {
