@@ -128,7 +128,7 @@ CREATE TABLE `skills_relations` (
 
 ### Пример тестовых данных
 
-ElasticSearch
+**ElasticSearch**
 
 ```sh
 GET /skills/programmers/_search?pretty -d
@@ -230,8 +230,9 @@ GET /skills/programmers/_search?pretty -d
   }
 }
 ```
+Объем данных ~27МБ.
 
-MySQL (денормализованные данные)
+**MySQL (денормализованные данные)**
 
 ```sql
 SELECT * FROM `programmers_denormalized` LIMIT 3
@@ -239,13 +240,18 @@ SELECT * FROM `programmers_denormalized` LIMIT 3
 
 ![Query Results](programmers_table.png)
 
-MySQL (нормализованные данные)
+Объем данных ~19МБ.
+
+
+**MySQL (нормализованные данные)**
 
 ```sql
 SELECT DISTINCT p.*, (SELECT GROUP_CONCAT(s1.skill) FROM skills_relations sr1 JOIN skills s1 ON sr1.skill=s1.id WHERE sr1.person=p.id) skills FROM skills_relations sr JOIN `programmers_normalized` p ON p.id=sr.person JOIN skills s ON s.id=sr.skill LIMIT 3
 ```
 
 ![Query Results](programmers_table.png)
+
+Объем данных ~42МБ.
 
 
 
@@ -262,6 +268,7 @@ PHP | 5.6.27
 Zend OPcache| 7.0.6
 MySQL | MariaDB Server 10.1.18
 ElasticSearch | 2.4
+Apache | 2.4.23
 
 ### Скриншоты
 
