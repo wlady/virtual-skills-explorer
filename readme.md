@@ -236,7 +236,7 @@ CREATE TABLE `programmers_denormalized` (
 #### Пример тестовых данных
 
 ```sql
-SELECT * FROM programmers_denormalized LIMIT 3
+SELECT * FROM programmers_denormalized LIMIT 3;
 ```
 
 ![Query Results](denormalized.png)
@@ -348,9 +348,9 @@ LIMIT 0, 50;
 -------- | ---------
 PHP | 5.6.27
 Zend OPcache| 7.0.6
+Apache | 2.4.23
 MySQL | MariaDB Server 10.1.18
 ElasticSearch | 2.4
-Apache | 2.4.23
 
 ### Скриншоты
 
@@ -361,16 +361,13 @@ Apache | 2.4.23
 ![Hits](places.png)
 
 
-### Apache Bench
+## Тестирование
 
-POST данные взяты из локального файла и соответствуют настройкам поиска на скриншотах выше.
 Перед каждым тестом очищался кэш.
 
 ```sh
 $ php artizan cache:clear
-$ ab -n 10000 -c 10 -T 'application/x-www-form-urlencoded' -p post_data.txt http://exp/filter
 ```
-
 Подключение нового дата провайдера производилось вручную, в файле `app/Http/Controllers/Controller.php`:
 
 ```php
@@ -388,6 +385,15 @@ $ ab -n 10000 -c 10 -T 'application/x-www-form-urlencoded' -p post_data.txt http
 ```
 
 Для доступа к ElasticSearch использовался пакет [Elasticquent](https://packagist.org/packages/elasticquent/elasticquent). В тяжелых запросах к MySQL использовался "чистый" SQL.
+
+
+### Apache Bench Tool
+
+POST данные взяты из локального файла и соответствуют настройкам поиска на скриншотах выше.
+
+```sh
+$ ab -n 10000 -c 10 -T 'application/x-www-form-urlencoded' -p post_data.txt http://exp/filter
+```
 
 
 **Результаты тестов ElasticSearch**
@@ -540,6 +546,19 @@ Percentage of the requests served within a certain time (ms)
   99%    135
  100%    204 (longest request)
 ```
+
+## Визуальный тест
+
+Тестирование в Google Chrome 54.0.2840.87 (64-bit).
+
+Время выполнения нового поискового запроса:
+ 
+Тип базы данных       | Время выполнения запроса
+----------------------|--------------------
+ElasticSearch | 0.03-0.12 секунд
+денормализованная таблица MySQL | 0.17-0.20 секунд
+связанные таблицы MySQL | 1.55-1.68 секунд
+
 
 ## Выводы
 

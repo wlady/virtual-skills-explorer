@@ -66,6 +66,7 @@ class ProgrammerMysqlDenormalizedStorage extends Model implements ProgrammerStor
         $results = self::hydrateRaw($sql)->toArray();
         $numRows = self::hydrateRaw('SELECT FOUND_ROWS() total');
         array_walk($results, function (&$item) {
+            $item['registered'] = date('Y-m-d', $item['registered']);
             $item['skills'] = explode(',', str_replace('"', '', $item['skills']));
             $item['location'] = [
                 'lat' => $item['latitude'],
