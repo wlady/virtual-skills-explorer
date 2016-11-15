@@ -249,14 +249,6 @@ SELECT DISTINCT p.*, (SELECT GROUP_CONCAT(s1.skill) FROM skills_relations sr1 JO
 
 
 
-### Скриншоты
-
-![Hits](hits.png)
-
-![Hits](skills.png)
-
-![Hits](places.png)
-
 ### Технологии
 
 Тестовая программа написана с использованием Laravel 5. Для компиляции ассетов необходим установленный npm, Node.js, gulp и тд (см. документацию [Laravel Elixir](https://laravel.com/docs/5.0/elixir)).
@@ -270,6 +262,14 @@ PHP | 5.6.27
 Zend OPcache| 7.0.6
 MySQL | MariaDB Server 10.1.18
 ElasticSearch | 2.4
+
+### Скриншоты
+
+![Hits](hits.png)
+
+![Hits](skills.png)
+
+![Hits](places.png)
 
 
 ### Apache Bench
