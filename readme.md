@@ -210,7 +210,7 @@ SELECT * FROM programmers_denormalized LIMIT 3
 
 
 
-### Структура MySQL связанных таблиц
+### Структура связанных таблиц MySQL
 
 ```sql
 CREATE TABLE `programmers_normalized` (
@@ -231,7 +231,7 @@ CREATE TABLE `skills` (
  `skill` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
  PRIMARY KEY (`id`),
  KEY `skill` (`skill`)
-) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 CREATE TABLE `skills_relations` (
  `person` int(11) NOT NULL,
@@ -257,7 +257,7 @@ SELECT DISTINCT p.*, (SELECT GROUP_CONCAT(s1.skill) FROM skills_relations sr1 JO
 
 ### Технологии
 
-Тестовая программа написана с использованием Laravel 5. Для компиляции ассетов необходим установленный npm, Node.js, gulp и тд (см. документацию [Laravel Elixir](https://laravel.com/docs/5.0/elixir)).
+Тестовая программа написана с использованием [Laravel 5](https://laravel.com/). Для компиляции ассетов необходим установленный `npm`, `Node.js`, `gulp` и тд (см. документацию [Laravel Elixir](https://laravel.com/docs/5.0/elixir)).
 На UI странице использованы [JQuery](https://jquery.com/), [Bootstrap](http://getbootstrap.com/), [HighCharts](http://www.highcharts.com/) и [GoogleMap JavaScript API](https://developers.google.com/maps/documentation/javascript/).
 
 **Версии компонентов:**
