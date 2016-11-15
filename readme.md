@@ -79,13 +79,13 @@ GET /skills/programmers/_mapping?pretty
 #### Пример тестовых данных
 
 ```sh
-GET /skills/programmers/_search?pretty -d
+GET /skills/programmers/_search?pretty
 {
   "size": 3
 }
 ```
 
-Данные, отсортированные по релевантности
+Данные, отсортированные по релевантности:
 
 ```json
 {
@@ -180,6 +180,40 @@ GET /skills/programmers/_search?pretty -d
 ```
 Объем данных ~27МБ.
 
+#### ElasticSearch Query
+
+Пример поискового запроса:
+
+```
+GET /skills/programmers/_search
+{
+  "query": {
+    "bool": { 
+      "must": [
+        {
+          "terms": {
+            "skills": [
+              "apache",
+              "jquery",
+              "php"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "sort": [
+    {
+      "registered": {
+        "order": "desc"
+      }
+    }
+  ],
+  "size": 50,
+  "from": 0
+}
+```
+
 ### Структура MySQL (денормализованная)
 
 
@@ -209,6 +243,17 @@ SELECT * FROM programmers_denormalized LIMIT 3
 
 Объем данных ~19МБ.
 
+#### MySQL Query
+
+Пример поискового запроса:
+
+```sql
+SELECT DISTINCT SQL_CALC_FOUND_ROWS * 
+FROM programmers_denormalized 
+WHERE skills LIKE '%"apache"%' OR skills LIKE '%"jquery"%' OR skills LIKE '%"php"%' 
+ORDER BY registered DESC
+LIMIT 0, 50;
+```
 
 
 ### Структура связанных таблиц MySQL
@@ -247,19 +292,55 @@ CREATE TABLE `skills_relations` (
 #### Пример тестовых данных
 
 ```sql
-SELECT DISTINCT p.*, (SELECT GROUP_CONCAT(s1.skill) FROM skills_relations sr1 JOIN skills s1 ON sr1.skill=s1.id WHERE sr1.person=p.id) skills FROM skills_relations sr JOIN programmers_normalized p ON p.id=sr.person JOIN skills s ON s.id=sr.skill LIMIT 3
+SELECT DISTINCT 
+p.*, 
+(SELECT 
+  GROUP_CONCAT(s1.skill) 
+  FROM skills_relations sr1 
+  JOIN skills s1 ON sr1.skill=s1.id 
+  WHERE sr1.person=p.id) skills 
+FROM skills_relations sr 
+JOIN programmers_normalized p ON p.id=sr.person 
+JOIN skills s ON s.id=sr.skill 
+LIMIT 3;
 ```
 
 ![Query Results](programmers_table.png)
 
 Объем данных ~42МБ.
 
+#### MySQL Query
+
+Пример поискового запроса:
+
+```sql
+SELECT DISTINCT SQL_CALC_FOUND_ROWS 
+p.name, 
+p.city, 
+p.ip, 
+p.registered, 
+p.latitude, 
+p.longitude, 
+p.timezone, 
+(SELECT 
+  GROUP_CONCAT(s1.skill) 
+  FROM skills_relations sr1 
+  JOIN skills s1 ON sr1.skill=s1.id 
+  WHERE sr1.person=p.id) skills 
+FROM skills_relations sr 
+JOIN programmers_normalized p ON p.id=sr.person 
+JOIN skills s ON s.id=sr.skill 
+WHERE s.skill IN ("apache","jquery","php") 
+ORDER BY registered DESC 
+LIMIT 0, 50;
+```
 
 
 ### Технологии
 
 Тестовая программа написана с использованием [Laravel 5](https://laravel.com/). Для компиляции ассетов необходим установленный `npm`, `Node.js`, `gulp` и тд (см. документацию [Laravel Elixir](https://laravel.com/docs/5.0/elixir)).
 На UI странице подключены [JQuery](https://jquery.com/), [Bootstrap](http://getbootstrap.com/), [HighCharts](http://www.highcharts.com/) и [GoogleMap](https://developers.google.com/maps/documentation/javascript/).
+
 
 **Версии компонентов:**
 

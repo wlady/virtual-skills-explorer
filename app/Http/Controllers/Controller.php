@@ -16,6 +16,6 @@ abstract class Controller extends BaseController {
 
     public function __construct()
     {
-        $this->person = new ProgrammerRepository(new ProgrammerElasticStorage());
+        $this->person = new ProgrammerRepository(new ProgrammerMysqlStorage());
     }
 }
