@@ -230,7 +230,7 @@ SELECT DISTINCT p.*, (SELECT GROUP_CONCAT(s1.skill) FROM skills_relations sr1 JO
 
 ![Hits](hits.png)
 
-![Hits](hitsskills.png)
+![Hits](skills.png)
 
 ![Hits](places.png)
 
