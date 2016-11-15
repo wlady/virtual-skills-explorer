@@ -305,7 +305,7 @@ $ ab -n 10000 -c 10 -T 'application/x-www-form-urlencoded' -p post_data.txt http
  }
 ```
 
-**ElasticSearch**
+**Результаты тестов ElasticSearch**
 
 ```sh
 This is ApacheBench, Version 2.3 <$Revision: 1748469 $>
@@ -355,7 +355,7 @@ Percentage of the requests served within a certain time (ms)
   99%    146
  100%    249 (longest request)
 ```
-**MySQL**
+**Результаты тестов MySQL**
 
 ```
 This is ApacheBench, Version 2.3 <$Revision: 1748469 $>
@@ -406,7 +406,7 @@ Percentage of the requests served within a certain time (ms)
  100%    217 (longest request)
 ```
 
-**MySQL (денормализованная)**
+**Результаты тестов MySQL (денормализованная)**
 ```
 This is ApacheBench, Version 2.3 <$Revision: 1748469 $>
 Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
