@@ -84,7 +84,7 @@ GET /skills/programmers/_search?pretty -d
 }
 ```
 
-Двнные, отсортированные по релевантности
+Данные, отсортированные по релевантности
 
 ```json
 {
@@ -258,7 +258,7 @@ SELECT DISTINCT p.*, (SELECT GROUP_CONCAT(s1.skill) FROM skills_relations sr1 JO
 ### Технологии
 
 Тестовая программа написана с использованием [Laravel 5](https://laravel.com/). Для компиляции ассетов необходим установленный `npm`, `Node.js`, `gulp` и тд (см. документацию [Laravel Elixir](https://laravel.com/docs/5.0/elixir)).
-На UI странице использованы [JQuery](https://jquery.com/), [Bootstrap](http://getbootstrap.com/), [HighCharts](http://www.highcharts.com/) и [GoogleMap JavaScript API](https://developers.google.com/maps/documentation/javascript/).
+На UI странице подключены [JQuery](https://jquery.com/), [Bootstrap](http://getbootstrap.com/), [HighCharts](http://www.highcharts.com/) и [GoogleMap](https://developers.google.com/maps/documentation/javascript/).
 
 **Версии компонентов:**
 
@@ -282,9 +282,27 @@ Apache | 2.4.23
 ### Apache Bench
 
 POST данные взяты из локального файла и соответствуют настройкам поиска на скриншотах выше.
+Перед каждым тестом очищался кэш.
 
 ```sh
-ab -n 10000 -c 10 -T 'application/x-www-form-urlencoded' -p post_data.txt http://exp/filter
+$ php artizan cache:clear
+$ ab -n 10000 -c 10 -T 'application/x-www-form-urlencoded' -p post_data.txt http://exp/filter
+```
+
+Подключение нового дата провайдера производилось вручную, в файле `app/Http/Controllers/Controller.php`:
+
+```php
+ abstract class Controller extends BaseController {
+ 
+ 	use DispatchesCommands, ValidatesRequests;
+ 
+     protected $person = null;
+ 
+     public function __construct()
+     {
+         $this->person = new ProgrammerRepository(new ProgrammerElasticStorage());
+     }
+ }
 ```
 
 **ElasticSearch**
