@@ -206,7 +206,7 @@ GET /skills/programmers/_search?pretty -d
     ]
   }
 }
-``
+```
 
 MySQL (денормализованные данные)
 
