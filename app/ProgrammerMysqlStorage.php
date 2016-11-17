@@ -10,6 +10,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 /**
  * Class PlayerElasticStorage
@@ -50,6 +51,8 @@ class ProgrammerMysqlStorage extends Model implements ProgrammerStorageInterface
         $size = intval($request->get('size'));
         $sort = filter_var($request->get('sort'), FILTER_SANITIZE_STRING);
         $dir = filter_var($request->get('dir'), FILTER_SANITIZE_STRING);
+        $skills = Cache::get('skills', Skill::all()->toArray());
+        print_r($skills);
         $sql =
             'SELECT DISTINCT SQL_CALC_FOUND_ROWS
                 p.name, p.city, p.ip, p.registered, p.latitude, p.longitude, p.timezone, 
