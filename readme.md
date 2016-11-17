@@ -398,7 +398,7 @@ $ ab -n 10000 -c 10 -T 'application/x-www-form-urlencoded' -p post_data.txt http
 
 **Результаты тестов ElasticSearch**
 
-```sh
+```
 This is ApacheBench, Version 2.3 <$Revision: 1748469 $>
 Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
 Licensed to The Apache Software Foundation, http://www.apache.org/
