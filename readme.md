@@ -300,8 +300,7 @@ p.*,
   JOIN skills s1 ON sr1.skill=s1.id 
   WHERE sr1.person=p.id) skills 
 FROM skills_relations sr 
-JOIN programmers_normalized p ON p.id=sr.person 
-JOIN skills s ON s.id=sr.skill 
+JOIN programmers_normalized p ON p.id=sr.person
 LIMIT 3;
 ```
 
