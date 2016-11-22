@@ -80,7 +80,7 @@ class MysqlMemcached extends Model implements StorageInterface
             $item['skills'] = array_map(
                 function($el) {
                     return trim($el, '"');
-                }, explode(', ', $item['skills'])
+                }, explode(',', $item['skills'])
             );
             $item['location'] = [
                 'lat' => $item['latitude'],
