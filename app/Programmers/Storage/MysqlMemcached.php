@@ -77,7 +77,11 @@ class MysqlMemcached extends Model implements StorageInterface
         $numRows = self::hydrateRaw('SELECT FOUND_ROWS() total');
         array_walk($results, function (&$item) {
             $item['registered'] = date('Y-m-d', $item['registered']);
-            $item['skills'] = explode(',', $item['skills']);
+            $item['skills'] = array_map(
+                function($el) {
+                    return trim($el, '"');
+                }, explode(', ', $item['skills'])
+            );
             $item['location'] = [
                 'lat' => $item['latitude'],
                 'lon' => $item['longitude'],
