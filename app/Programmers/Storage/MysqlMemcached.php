@@ -47,6 +47,7 @@ class MysqlMemcached extends Model implements StorageInterface
      */
     public function getFiltered(Request $request)
     {
+        $startTime = microtime(true);
         $skills = $request->get('skills');
         $from = intval($request->get('from'));
         $size = intval($request->get('size'));
@@ -70,7 +71,6 @@ class MysqlMemcached extends Model implements StorageInterface
             (is_array($skills) ? ' WHERE sr.skill IN (' . implode(',', array_keys($seek)) . ') ' : ' ') .
             (!empty($sort) ? ' ORDER BY ' . $sort . ' ' . $dir : ' ') .
             ' LIMIT ' . $from . ', ' . $size;
-        $startTime = microtime(true);
         $results = self::hydrateRaw($sql)->toArray();
         $numRows = self::hydrateRaw('SELECT FOUND_ROWS() total');
         array_walk($results, function (&$item) use ($seek) {

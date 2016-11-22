@@ -46,6 +46,7 @@ class MysqlDenormalized extends Model implements StorageInterface
      */
     public function getFiltered(Request $request)
     {
+        $startTime = microtime(true);
         $skills = $request->get('skills');
         $from = intval($request->get('from'));
         $size = intval($request->get('size'));
@@ -63,7 +64,6 @@ class MysqlDenormalized extends Model implements StorageInterface
             (count($where) ? ' WHERE ' . implode(' OR ', $where) . ' ' : ' ') .
             (!empty($sort) ? ' ORDER BY ' . $sort . ' ' . $dir : ' ') .
             ' LIMIT ' . $from . ', ' . $size;
-        $startTime = microtime(true);
         $results = self::hydrateRaw($sql)->toArray();
         $numRows = self::hydrateRaw('SELECT FOUND_ROWS() total');
         array_walk($results, function (&$item) {

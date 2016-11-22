@@ -65,6 +65,7 @@ class Elastic extends Model implements StorageInterface
      */
     public function getFiltered(Request $request)
     {
+        $startTime = microtime(true);
         $skills = $request->get('skills');
         $from = intval($request->get('from'));
         $size = intval($request->get('size'));
@@ -93,7 +94,6 @@ class Elastic extends Model implements StorageInterface
                 ]
             ];
         }
-        $startTime = microtime(true);
         $results = $this->request($body, 'search');
         $results['elapsed'] = (float) number_format(microtime(true) - $startTime, 5);
         return $results;
