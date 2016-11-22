@@ -52,13 +52,6 @@ class Mysql extends Model implements StorageInterface
         $size = intval($request->get('size'));
         $sort = filter_var($request->get('sort'), FILTER_SANITIZE_STRING);
         $dir = filter_var($request->get('dir'), FILTER_SANITIZE_STRING);
-        $skills = Cache::get('skills', function() {
-            $records = Skill::all()->toArray();
-            return array_combine(
-                array_column($records, 'id'),
-                array_column($records, 'skill')
-            );
-        });
         $sql =
             'SELECT DISTINCT SQL_CALC_FOUND_ROWS
                 p.name, p.city, p.ip, p.registered, p.latitude, p.longitude, p.timezone, 

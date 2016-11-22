@@ -374,11 +374,11 @@ $ php artizan cache:clear
  
  	use DispatchesCommands, ValidatesRequests;
  
-     protected $person = null;
+     protected $programmers = null;
  
      public function __construct()
      {
-         $this->person = new ProgrammerRepository(new ProgrammerElasticStorage());
+         $this->programmers = new Repository(new Elastic());
      }
  }
 ```
