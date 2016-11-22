@@ -15,7 +15,7 @@ class SearchController extends Controller
     public function filter(Request $request)
     {
         return response()
-            ->json($this->person->getFiltered($request))
+            ->json($this->programmers->getFiltered($request))
             ->header('Content-Type', 'text/json');
     }
 }

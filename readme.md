@@ -334,7 +334,6 @@ ORDER BY registered DESC
 LIMIT 0, 50;
 ```
 
-
 ### Технологии
 
 Тестовая программа написана с использованием [Laravel 5](https://laravel.com/). Для компиляции ассетов необходим установленный `npm`, `Node.js`, `gulp` и тд (см. документацию [Laravel Elixir](https://laravel.com/docs/5.0/elixir)).

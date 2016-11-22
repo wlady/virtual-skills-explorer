@@ -6,8 +6,9 @@
  * Time: 15:44
  */
 
-namespace App;
+namespace App\Programmers\Storage;
 
+use App\Programmers\Skill;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
@@ -16,7 +17,7 @@ use Illuminate\Support\Facades\Cache;
  * Class PlayerElasticStorage
  * @package App
  */
-class ProgrammerMysqlStorage extends Model implements ProgrammerStorageInterface
+class Mysql extends Model implements StorageInterface
 {
     protected $table = 'programmers_normalized';
 

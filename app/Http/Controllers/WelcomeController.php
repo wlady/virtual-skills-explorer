@@ -1,6 +1,5 @@
 <?php namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 
 class WelcomeController extends Controller
 {
@@ -35,8 +34,8 @@ class WelcomeController extends Controller
     public function index()
     {
         return view('welcome', [
-            'total' => $this->person->getTotal(),
-            'skills' => $this->person->getSkills(),
+            'total' => $this->programmers->getTotal(),
+            'skills' => $this->programmers->getSkills(),
         ]);
     }
 
