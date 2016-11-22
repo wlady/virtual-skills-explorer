@@ -53,6 +53,7 @@ class MysqlMemcached extends Model implements StorageInterface
         $size = intval($request->get('size'));
         $sort = filter_var($request->get('sort'), FILTER_SANITIZE_STRING);
         $dir = filter_var($request->get('dir'), FILTER_SANITIZE_STRING);
+        // pre-fetch skills
         $skillsArray = Cache::get('skills', function() {
             $records = Skill::all()->toArray();
             return array_combine(
@@ -60,22 +61,23 @@ class MysqlMemcached extends Model implements StorageInterface
                 array_column($records, 'skill')
             );
         });
+        // and use it to filter skills by IDs
         $seek = is_array($skills) ?
-            array_intersect(array_map('strtolower', $skillsArray), array_map('strtolower', $skills)) :
+            array_keys(array_intersect(array_map('strtolower', $skillsArray), array_map('strtolower', $skills))) :
             [];
         $sql =
             'SELECT DISTINCT SQL_CALC_FOUND_ROWS
-                p.name, p.city, p.ip, p.registered, p.latitude, p.longitude, p.timezone 
+                p.name, p.city, p.ip, p.registered, p.latitude, p.longitude, p.timezone, p.skills 
             FROM skills_relations sr 
-            JOIN programmers_normalized p ON p.id=sr.person ' .
-            (is_array($skills) ? ' WHERE sr.skill IN (' . implode(',', array_keys($seek)) . ') ' : ' ') .
+            JOIN programmers_denormalized p ON p.id=sr.person ' .
+            (is_array($skills) ? ' WHERE sr.skill IN (' . implode(',', $seek) . ') ' : ' ') .
             (!empty($sort) ? ' ORDER BY ' . $sort . ' ' . $dir : ' ') .
             ' LIMIT ' . $from . ', ' . $size;
         $results = self::hydrateRaw($sql)->toArray();
         $numRows = self::hydrateRaw('SELECT FOUND_ROWS() total');
-        array_walk($results, function (&$item) use ($seek) {
+        array_walk($results, function (&$item) {
             $item['registered'] = date('Y-m-d', $item['registered']);
-            $item['skills'] = array_values($seek);
+            $item['skills'] = explode(',', $item['skills']);
             $item['location'] = [
                 'lat' => $item['latitude'],
                 'lon' => $item['longitude'],
